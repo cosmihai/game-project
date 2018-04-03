@@ -47,7 +47,7 @@ function main() {
 
   function buildGameScreen () {
     game = new Game(mainContentElement);
-    game.onEnded(handleGameEnd);
+    game.onEnded( handleGameEnd);
     game.build();
   }
 

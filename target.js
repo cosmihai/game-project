@@ -2,8 +2,8 @@
 
 function Target(ctx) {
   this.ctx = ctx;
-  this.x = Math.floor(Math.random() * 380 + 10);
-  this.y = Math.floor(Math.random() * 380 + 10) ;
+  this.x = Math.floor(Math.random() * 580 + 10);
+  this.y = Math.floor(Math.random() * 480 + 10) ;
   this.radius = 10;
   this.fillColor = 'yellow';
 }
