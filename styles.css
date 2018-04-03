@@ -16,7 +16,7 @@ body {
 
 /* ------------elements-------------------- */
 
-.starting-screen {
+.screen {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -34,7 +34,7 @@ h1.game-title {
 
 }
 
-button.play-button {
+.button {
   padding: 10px 30px;
   font-size: 36px;
   background-color: aqua;
@@ -45,5 +45,5 @@ button.play-button {
   width: 20%;
 }
 canvas {
-  background-color: red;
+  background-color:lightcoral;
 }

@@ -6,6 +6,7 @@ function createHtml(html) {
   return div.children[0];  
 }
 
+
 function main() {
   
   var mainContentElement = document.getElementById('main-content');
@@ -21,12 +22,12 @@ function main() {
   }
 
   function buildStartingScreen() {
-    startingScreenElement = createHtml(`<div class="starting-screen">
+    startingScreenElement = createHtml(`<div class="screen">
       <h1 class="game-title">Ugly Tank</h1>
-      <button class="play-button">PLay</button>      
+      <button class="button">PLay</button>      
     </div>`);
     mainContentElement.appendChild(startingScreenElement);
-    startButtonElement = document.querySelector('button');
+    startButtonElement = document.querySelector('.button');
     startButtonElement.addEventListener('click', handleStartClick);
   }
   
@@ -38,20 +39,16 @@ function main() {
   // ------GAME SCREEN
 
   var game;
-  function gameEnded() {
+
+  function handleGameEnd() {
     destroyGameScreen();
     buildGameOverScreen();
   }
- 
-
 
   function buildGameScreen () {
     game = new Game(mainContentElement);
-    game.onEnded(function() {
-      gameEnded();
-    });
+    game.onEnded(handleGameEnd);
     game.build();
-    // window.setTimeout(gameEnded, 1000)
   }
 
   function destroyGameScreen() {
@@ -71,9 +68,9 @@ function main() {
   }
 
   function buildGameOverScreen() {
-    gameOverScreenElement = createHtml(` <div class="starting-screen">
+    gameOverScreenElement = createHtml(` <div class="screen">
       <h1 class="game-title">Your score :</h1>
-      <button class="play-button">Try again</button>      
+      <button class="button">Try again</button>      
     </div>`);
     mainContentElement.appendChild(gameOverScreenElement);
     restartGameButtonElement = gameOverScreenElement.querySelector('button');
