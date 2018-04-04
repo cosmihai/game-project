@@ -1,10 +1,10 @@
 "use strict";
 
-function Target(ctx) {
+function Target(ctx, canvaWidth, canvaHeight) {
   this.ctx = ctx;
-  this.x = Math.floor(Math.random() * 580 + 10);
-  this.y = Math.floor(Math.random() * 480 + 10) ;
   this.radius = 10;
+  this.x = Math.floor(Math.random() * (canvaWidth-2*this.radius) + this.radius);
+  this.y = Math.floor(Math.random() * (canvaHeight-2*this.radius) + this.radius) ;
   this.fillColor = 'yellow';
 }
 
@@ -13,4 +13,7 @@ Target.prototype.draw = function () {
   this.ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2, true);
   this.ctx.fillStyle = this.fillColor;
   this.ctx.fill();
+  
 }
+
+

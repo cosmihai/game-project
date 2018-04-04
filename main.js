@@ -39,6 +39,8 @@ function main() {
   // ------GAME SCREEN
 
   var game;
+  var canvaWidth = 700;
+  var canvaHeight = 500;
 
   function handleGameEnd() {
     destroyGameScreen();
@@ -46,7 +48,7 @@ function main() {
   }
 
   function buildGameScreen () {
-    game = new Game(mainContentElement);
+    game = new Game(mainContentElement, canvaWidth, canvaHeight);
     game.onEnded( handleGameEnd);
     game.build();
   }

@@ -1,14 +1,17 @@
 "use strict";
 
-function Player (ctx) {
+function Player (ctx, canvaWidth, canvaHeight) {
+  
   this.ctx = ctx;
-  this.x = 290;
-  this.y = 470;
   this.width = 20;
   this.height = 20;
+  this.x = canvaWidth/2-this.width/2;
+  this.y = canvaHeight-2*this.height;
   this.speed = 0;
   this.direction = null;
   this.fillColor = 'rgb(30, 30, 30)';
+  this.canvaWidth = canvaWidth;
+  this.canvaHeight = canvaHeight;
 }
 
 Player.prototype.draw = function () {  
@@ -34,15 +37,15 @@ Player.prototype.update = function () {
       break;
   }
 
-  if(this.x>600) {
-    this.x %=600;
-  }else if (this.x<0){
-    this.x = 600-this.x;
-  }else if(this.y>500){
-    this.y %=500;
-  }else if(this.y<0){
-    this.y = 500-this.y;
-  }
+  // if(this.x>this.canvaWidth) {
+  //   this.x %=this.canvaWidth;
+  // }else if (this.x<0){
+  //   this.x = this.canvaWidth-this.x;
+  // }else if(this.y>this.canvaHeight){
+  //   this.y %=this.canvaHeight;
+  // }else if(this.y<0){
+  //   this.y = this.canvaHeight-this.y;
+  // }
 }
 
 Player.prototype.setSpeed = function (speed) {
