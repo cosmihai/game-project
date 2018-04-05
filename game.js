@@ -5,35 +5,47 @@ function Game (parentElement, canvaWidth, canvaHeight) {
   this.parentElement = parentElement;
   this.gameScreenElement = null;
   this.endGameButtonElement = null;
-  this.handleEndGameClick = null;
+  this.handleEndGame = null;
   this.ctx = null;
-  this.player = null;
-  this.target = null;
+  this.player = null; 
+  this.targetArray = [];
   this.canvaWidth= canvaWidth;
   this.canvaHeight = canvaHeight;
-    
+  this.intervalId =0;
+  this.counterTime = 0;
+ 
 }
-
-
-
 
 Game.prototype.build = function () {
   
-  this.gameScreenElement = createHtml(`<div class="screen">
-  <canvas id="canvas"></canvas>
-  <button class="button">End Game</button>      
-  </div>`);
-  this.parentElement.appendChild(this.gameScreenElement);
-  this.endGameButtonElement = document.querySelector('.button');
-  this.endGameButtonElement.addEventListener('click', this.handleEndGameClick)
+  this.gameScreenElement = createHtml(`<div class="screen"> <canvas id="canvas"></canvas> </div>`);
+  this.parentElement.appendChild(this.gameScreenElement);  
   this.canva = document.getElementById('canvas');
   this.canva.width = this.canvaWidth;
   this.canva.height = this.canvaHeight;
   this.ctx = this.canva.getContext('2d');
-  this.player = new Player(this.ctx, this.canvaWidth, this.canvaHeight);
-  this.target = new Target(this.ctx, this.canvaWidth, this.canvaHeight);
+  this.pointsElement = document.getElementById('points');  
+  this.player = new Player(this.ctx, this.canvaWidth, this.canvaHeight);  
+  this.collision = false;  
+  this.createTargetArray();  
   this.setupKeyBinding ();
-  this.render();   
+  this.setupTimeInterval();
+  this.render(); 
+  
+}
+
+Game.prototype.setupTimeInterval = function(){ 
+  this.intervalId = setInterval (function () {
+    this.counterTime ++;
+  }, 1000)
+}
+
+
+Game.prototype.createTargetArray = function () {
+  for (var i=0; i<15; i++) {
+    this.target = new Target(this.ctx, this.canvaWidth, this.canvaHeight);
+    this.targetArray.push(this.target);
+  }
 }
 
 Game.prototype.setupKeyBinding = function () {
@@ -44,19 +56,19 @@ Game.prototype.setupKeyBinding = function () {
 
     switch (key) {
       case "ArrowUp":
-        self.player.setSpeed(2);
+        self.player.setSpeed(3);
         self.player.setDirection('up');
         break;
       case "ArrowDown":
-        self.player.setSpeed(2);
+        self.player.setSpeed(3);
         self.player.setDirection('down');
         break;
       case "ArrowLeft":
-        self.player.setSpeed(2);
+        self.player.setSpeed(3);
         self.player.setDirection('left');
         break;
       case "ArrowRight":
-        self.player.setSpeed(2);
+        self.player.setSpeed(3);
         self.player.setDirection('right');
         break;
     }
@@ -65,7 +77,6 @@ Game.prototype.setupKeyBinding = function () {
   self.handleKeyUp = function () {
 
     self.player.setSpeed(0);
-
   }
 
   document.addEventListener('keydown', self.handleKeyDown);
@@ -79,8 +90,11 @@ Game.prototype.render = function () {
 
   self.updateAll();
   self.checkColision();
+  if (this.collision === true) {
+    return this.handleEndGame();    
+  }
   self.clear();
-  self.drawAll();
+  self.drawAll();  
 
   requestAnimationFrame(function () {
     self.render();
@@ -89,55 +103,63 @@ Game.prototype.render = function () {
 
 Game.prototype.updateAll = function () {
   this.player.update();
-  // this.target.update()
+  
 }
 Game.prototype.clear = function () {
   this.ctx.clearRect(0, 0, this.canvaWidth, this.canvaHeight);
 
 }
 Game.prototype.drawAll = function () {
-  this.target.draw();
+  for (var i=0; i<this.targetArray.length; i++) {
+    this.targetArray[i].draw();
+  }
   this.player.draw();
 }
 
-Game.prototype.checkColision = function () {
 
+
+Game.prototype.checkColision = function () {
+  var self = this;
   //-------check canva's border---------------
-  if (this.player.x > this.canvaWidth) {
-    this.player.x %= this.canvaWidth;
-  } else if (this.player.x < 0) {
-    this.player.x = this.canvaWidth - this.player.x;
-  } else if (this.player.y > this.canvaHeight) {
-    this.player.y %= this.canvaHeight;
-  } else if (this.player.y < 0) {
-    this.player.y = this.canvaHeight - this.player.y;
+  if (self.player.x > self.canvaWidth) {
+    self.player.x %= self.canvaWidth;
+  } else if (self.player.x < 0) {
+    self.player.x = self.canvaWidth - self.player.x;
+  } else if (self.player.y > self.canvaHeight) {
+    self.player.y %= self.canvaHeight;
+  } else if (self.player.y < 0) {
+    self.player.y = self.canvaHeight - self.player.y;
   }
 
-  //---------check colision-------
-  var xp = this.player.x+this.player.width/2;
-  var yp = this.player.y+this.player.height/2;
-  var xt = this.target.x;
-  var yt = this.target.y;
-  var rt = this.target.radius;
+  //---------CHECK COLISION--------------------------------------------------------------------------
+  var xp = self.player.x+self.player.width/2;
+  var yp = self.player.y+self.player.height/2;
+  var xt = self.target.x;
+  var yt = self.target.y;
+  var rt = self.target.radius;
   //---------getting the distance in between-----
   var distance;
   distance = Math.sqrt(Math.pow((xp-xt), 2)+Math.pow((yp-yt), 2))
 
   //------------------efect of colision-------
-    if (distance < rt + this.player.width / 2) {
-      console.log('auchhhh')
-  }
-
-  
+  if (distance < rt + self.player.width / 3) {
+    self.target.changeColor();
+    var sound = new Audio('sounds/bark.mp3');
+    // sound.loop = false;
+    sound.play(); 
+    clearInterval(self.intervalId)
+    // ---------  
+    setTimeout(function () {
+      self.collision = true
+    }, 2000)
+  } 
 }
-
-
 
 Game.prototype.destroy = function() {
   this.gameScreenElement.remove();
 }
 
 Game.prototype.onEnded = function (callback) {
-  this.handleEndGameClick = callback;
+  this.handleEndGame = callback;
 }
 

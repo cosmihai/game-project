@@ -23,7 +23,7 @@ function main() {
 
   function buildStartingScreen() {
     startingScreenElement = createHtml(`<div class="screen">
-      <h1 class="game-title">Ugly Tank</h1>
+      <h1 class="game-title">Find the mole</h1><h3 id ="instructions">Instructions: <br> ─ use the arrowkeys to move across the garden and try to find the mole</h3>
       <button class="button">PLay</button>      
     </div>`);
     mainContentElement.appendChild(startingScreenElement);
@@ -41,6 +41,7 @@ function main() {
   var game;
   var canvaWidth = 700;
   var canvaHeight = 500;
+  
 
   function handleGameEnd() {
     destroyGameScreen();
@@ -58,11 +59,12 @@ function main() {
     
   }
 
-
   // -----GAME OVER SCREEN
 
   var gameOverScreenElement;
   var restartGameButtonElement;
+  var finalTimeElement;
+  var time;
 
   function handleRestartClick() {
     destroyGameOverScreen();
@@ -70,12 +72,16 @@ function main() {
   }
 
   function buildGameOverScreen() {
+
+    time = game.intervalId;
     gameOverScreenElement = createHtml(` <div class="screen">
-      <h1 class="game-title">Your score :</h1>
+      <h1 class="game-title">Your time : <span id="final-time"> </span> sec.</h1>
       <button class="button">Try again</button>      
     </div>`);
     mainContentElement.appendChild(gameOverScreenElement);
-    restartGameButtonElement = gameOverScreenElement.querySelector('button');
+    finalTimeElement = document.getElementById('final-time');
+    finalTimeElement.innerHTML = time;
+    restartGameButtonElement = document.querySelector('button');
     restartGameButtonElement.addEventListener('click', handleRestartClick);
   }
 
