@@ -73,7 +73,7 @@ function main() {
 
   function buildGameOverScreen() {
 
-    time = game.intervalId;
+    time = game.counterTime;
     gameOverScreenElement = createHtml(` <div class="screen">
       <h1 class="game-title">Your time : <span id="final-time"> </span> sec.</h1>
       <button class="button">Try again</button>      

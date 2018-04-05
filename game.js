@@ -17,7 +17,7 @@ function Game (parentElement, canvaWidth, canvaHeight) {
 }
 
 Game.prototype.build = function () {
-  
+  this.sound = new Audio("sounds/bark.mp3");
   this.gameScreenElement = createHtml(`<div class="screen"> <canvas id="canvas"></canvas> </div>`);
   this.parentElement.appendChild(this.gameScreenElement);  
   this.canva = document.getElementById('canvas');
@@ -34,9 +34,10 @@ Game.prototype.build = function () {
   
 }
 
-Game.prototype.setupTimeInterval = function(){ 
-  this.intervalId = setInterval (function () {
-    this.counterTime ++;
+Game.prototype.setupTimeInterval = function(){
+  var self = this;
+  self.intervalId = setInterval (function () {
+    self.counterTime ++;
   }, 1000)
 }
 
@@ -144,9 +145,10 @@ Game.prototype.checkColision = function () {
   //------------------efect of colision-------
   if (distance < rt + self.player.width / 3) {
     self.target.changeColor();
-    var sound = new Audio('sounds/bark.mp3');
     // sound.loop = false;
-    sound.play(); 
+    if (this.sound.paused) {
+      this.sound.play(); 
+    }
     clearInterval(self.intervalId)
     // ---------  
     setTimeout(function () {
@@ -157,6 +159,7 @@ Game.prototype.checkColision = function () {
 
 Game.prototype.destroy = function() {
   this.gameScreenElement.remove();
+
 }
 
 Game.prototype.onEnded = function (callback) {
