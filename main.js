@@ -24,7 +24,7 @@ function main() {
   function buildStartingScreen() {
     startingScreenElement = createHtml(`<div class="screen">
       <h1 class="game-title">Find the mole</h1><h3 id ="instructions">Instructions: <br> ─ use the arrowkeys to move across the garden and try to find the mole</h3>
-      <button class="button">PLay</button>      
+      <button class="button">Play</button>      
     </div>`);
     mainContentElement.appendChild(startingScreenElement);
     startButtonElement = document.querySelector('.button');
